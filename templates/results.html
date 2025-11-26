@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results • JobFinder AI{% endblock %}
+
+{% block content %}
+<div class="flex-1 flex flex-col min-h-screen">
+
+    <!-- Top Bar (Sticky) -->
+    <div class="sticky top-0 z-50 glass border-b border-white/10 backdrop-blur-2xl">
+        <div class="max-w-7xl mx-auto px-4 py-3">
+            <form action="/search" method="POST" class="flex flex-col md:flex-row items-center gap-4">
+
+                <!-- Logo -->
+                <a href="/" class="flex-shrink-0 flex items-center gap-2 mr-4">
+                    <div
+                        class="w-9 h-9 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-md">
+                        JF
+                    </div>
+                </a>
+
+                <!-- Search Inputs -->
+                <div class="flex-1 flex gap-2 w-full">
+                    <div class="relative flex-1">
+                        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <input type="text" name="role" value="{{ request.form.role or '' }}" placeholder="Job Title"
+                            class="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:bg-white/10 focus:border-blue-500 focus:outline-none transition text-sm">
+                    </div>
+                    <div class="relative flex-1">
+                        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <input type="text" name="place" value="{{ request.form.place or '' }}" placeholder="Country"
+                            class="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:bg-white/10 focus:border-blue-500 focus:outline-none transition text-sm">
+                    </div>
+                    <button type="submit"
+                        class="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-xl transition shadow-lg shadow-blue-500/20">
+                        Search
+                    </button>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center gap-3 flex-shrink-0">
+                    <a href="/upload"
+                        class="px-4 py-2.5 bg-white/5 border border-white/10 hover:bg-white/10 text-gray-300 hover:text-white rounded-xl transition text-sm font-medium">
+                        Upload CV
+                    </a>
+                    <a href="/build-cv"
+                        class="px-4 py-2.5 bg-white/5 border border-white/10 hover:bg-white/10 text-gray-300 hover:text-white rounded-xl transition text-sm font-medium">
+                        Build CV
+                    </a>
+                    <button onclick="openBot()"
+                        class="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:shadow-lg hover:shadow-purple-500/20 transition text-sm font-medium flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        Bot
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 px-4 py-8 max-w-7xl mx-auto w-full">
+
+        <!-- CV Prompt Banner -->
+        {% if not session.get('cv_parsed') %}
+        <div
+            class="mb-8 p-6 rounded-2xl bg-gradient-to-r from-blue-900/40 to-purple-900/40 border border-blue-500/30 flex items-center justify-between gap-6">
+            <div>
+                <h3 class="text-lg font-bold text-white mb-1">Want better job matches?</h3>
+                <p class="text-gray-300 text-sm">Upload your CV to unlock personalized match scores and missing skills
+                    analysis.</p>
+            </div>
+            <a href="/upload"
+                class="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition shadow-lg shadow-blue-500/20 whitespace-nowrap">
+                Upload CV
+            </a>
+        </div>
+        {% endif %}
+
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- Filters Sidebar -->
+            <aside class="w-full lg:w-64 flex-shrink-0 space-y-6 hidden lg:block">
+                <div class="glass p-5 rounded-2xl border border-white/10">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-white">Filters</h3>
+                        <button class="text-xs text-blue-400 hover:text-blue-300">Reset</button>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">Date
+                                Posted</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+                                    <input type="checkbox" class="rounded border-gray-600 bg-gray-700 text-blue-500">
+                                    Last 24 hours
+                                </label>
+                                <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+                                    <input type="checkbox" class="rounded border-gray-600 bg-gray-700 text-blue-500">
+                                    Last 3 days
+                                </label>
+                                <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+                                    <input type="checkbox" class="rounded border-gray-600 bg-gray-700 text-blue-500">
+                                    Last 7 days
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="h-px bg-white/10"></div>
+
+                        <div>
+                            <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">Job
+                                Type</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+                                    <input type="checkbox" class="rounded border-gray-600 bg-gray-700 text-blue-500">
+                                    Full-time
+                                </label>
+                                <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+                                    <input type="checkbox" class="rounded border-gray-600 bg-gray-700 text-blue-500">
+                                    Contract
+                                </label>
+                                <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+                                    <input type="checkbox" class="rounded border-gray-600 bg-gray-700 text-blue-500">
+                                    Remote
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Job Results -->
+            <div class="flex-1">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold text-white">
+                        {% if jobs %} {{ jobs|length }} Jobs Found {% else %} No Jobs Found {% endif %}
+                    </h2>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm text-gray-400">Sort by:</span>
+                        <select
+                            class="bg-white/5 border border-white/10 rounded-lg text-sm text-white px-3 py-1.5 focus:outline-none">
+                            <option>Relevance</option>
+                            <option>Date</option>
+                            <option>Match Score</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    {% if jobs %}
+                    {% for job in jobs %}
+                    <div
+                        class="glass p-6 rounded-2xl border border-white/10 hover:border-blue-500/30 transition-all duration-300 group relative">
+                        <div class="flex justify-between items-start gap-4">
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">
+                                    <a href="/job/{{ job.id }}" class="focus:outline-none">
+                                        <span class="absolute inset-0" aria-hidden="true"></span>
+                                        {{ job.title }}
+                                    </a>
+                                </h3>
+                                <p class="text-gray-300 mt-1 font-medium">{{ job.company }}</p>
+
+                                <div class="flex flex-wrap items-center gap-3 mt-3 text-sm text-gray-400">
+                                    <span class="flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        {{ job.location }}
+                                    </span>
+                                    <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
+                                    <span class="flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
+                                        {{ job.source|default('LinkedIn') }}
+                                    </span>
+                                    <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
+                                    <span>{{ job.posted|default('Recently') }}</span>
+                                </div>
+
+                                <!-- Skills Preview -->
+                                {% if job.skills_extracted %}
+                                <div class="flex flex-wrap gap-2 mt-4 relative z-10">
+                                    {% for skill in job.skills_extracted[:4] %}
+                                    <span
+                                        class="px-2.5 py-1 bg-white/5 text-gray-300 text-xs rounded-md border border-white/10">
+                                        {{ skill }}
+                                    </span>
+                                    {% endfor %}
+                                    {% if job.skills_extracted|length > 4 %}
+                                    <span class="px-2.5 py-1 text-gray-500 text-xs">+{{ job.skills_extracted|length - 4
+                                        }} more</span>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Match Score / Action -->
+                            <div class="flex flex-col items-end gap-3 relative z-10">
+                                {% if session.get('cv_parsed') %}
+                                {% if job.match_score is defined %}
+                                <div class="flex flex-col items-center">
+                                    <div class="relative w-14 h-14 flex items-center justify-center">
+                                        <svg class="w-full h-full transform -rotate-90">
+                                            <circle cx="28" cy="28" r="26" stroke="currentColor" stroke-width="4"
+                                                fill="transparent" class="text-gray-700" />
+                                            <circle cx="28" cy="28" r="26" stroke="currentColor" stroke-width="4"
+                                                fill="transparent"
+                                                class="{% if job.match_score >= 80 %}text-green-500{% elif job.match_score >= 50 %}text-yellow-500{% else %}text-red-500{% endif %}"
+                                                stroke-dasharray="163.36"
+                                                stroke-dashoffset="{{ 163.36 - (163.36 * job.match_score / 100) }}" />
+                                        </svg>
+                                        <span class="absolute text-sm font-bold text-white">{{ job.match_score
+                                            }}%</span>
+                                    </div>
+                                    <span
+                                        class="text-[10px] text-gray-400 mt-1 uppercase tracking-wide font-semibold">Match</span>
+                                </div>
+                                {% endif %}
+                                {% else %}
+                                <div class="text-center px-3 py-2 bg-white/5 rounded-lg border border-white/10">
+                                    <span class="block text-xs text-gray-400 mb-1">Match Score</span>
+                                    <a href="/upload" class="text-xs font-bold text-blue-400 hover:text-blue-300">Upload
+                                        CV</a>
+                                </div>
+                                {% endif %}
+
+                                <button
+                                    class="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="glass p-12 rounded-3xl text-center border border-white/10">
+                        <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-10 h-10 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Start your search</h3>
+                        <p class="text-gray-400">Enter a job title and location to find your next opportunity.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openBot() {
+        alert("AI Bot is coming soon!");
+    }
+</script>
+{% endblock %}

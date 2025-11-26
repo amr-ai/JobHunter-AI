@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}JobFinder AI • Find Your Dream Job{% endblock %}
+
+{% block content %}
+<div class="flex-1 flex flex-col min-h-screen relative overflow-hidden">
+
+    <!-- Header -->
+    <nav class="relative z-50 px-6 py-6">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Logo -->
+            <a href="/" class="flex items-center gap-2">
+                <div
+                    class="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                    JF
+                </div>
+                <span class="text-xl font-bold text-white tracking-tight">JobFinder AI</span>
+            </a>
+
+            <!-- Right Links -->
+            <div class="hidden md:flex items-center gap-6">
+                <a href="/upload" class="text-gray-300 hover:text-white transition font-medium">Upload CV</a>
+                <a href="/build-cv" class="text-gray-300 hover:text-white transition font-medium">Build CV</a>
+                <a href="/chat" class="text-gray-300 hover:text-white transition font-medium flex items-center gap-2">
+                    <span>Chat</span>
+                    <span
+                        class="px-2 py-0.5 bg-green-500/20 text-green-300 text-xs rounded-full border border-green-500/30">RAG</span>
+                </a>
+                <button onclick="openBot()"
+                    class="text-gray-300 hover:text-white transition font-medium flex items-center gap-2">
+                    <span>Automatic Bot</span>
+                    <span
+                        class="px-2 py-0.5 bg-purple-500/20 text-purple-300 text-xs rounded-full border border-purple-500/30">New</span>
+                </button>
+
+                {% if session.get('user_id') %}
+                <!-- Logged in - Show Profile -->
+                <a href="/profile"
+                    class="flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition">
+                    <div
+                        class="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                        {{ session.get('username', 'U')[0].upper() }}
+                    </div>
+                    <span class="text-white font-medium">{{ session.get('username') }}</span>
+                </a>
+                {% else %}
+                <!-- Not logged in - Show Sign In/Up -->
+                <a href="/signin" class="px-5 py-2 text-gray-300 hover:text-white transition font-medium">
+                    Sign In
+                </a>
+                <a href="/signup"
+                    class="px-5 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500/30 transition font-medium">
+                    Sign Up
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Search Section -->
+    <main class="flex-1 flex flex-col items-center justify-center px-6 relative z-10 -mt-20">
+        <div class="w-full max-w-4xl text-center">
+
+            <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
+                Get Hired <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">10x
+                    Faster</span>
+                <br>with JobFinder AI.
+            </h1>
+
+            <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
+                Search thousands of jobs from LinkedIn, Indeed, and more.
+                Upload your CV to see your match score instantly.
+            </p>
+
+            <!-- Search Box -->
+            <form action="/search" method="POST"
+                class="glass p-4 rounded-3xl shadow-2xl border border-white/10 relative overflow-hidden group">
+                <div
+                    class="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition duration-500">
+                </div>
+
+                <div class="relative flex flex-col md:flex-row gap-4">
+                    <!-- Job Title Input -->
+                    <div class="flex-1 relative">
+                        <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                        <input type="text" name="role" required
+                            class="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:bg-white/10 focus:border-blue-500/50 transition text-lg"
+                            placeholder="Job title, keywords, or company">
+                    </div>
+
+                    <!-- Country Input -->
+                    <div class="flex-1 relative">
+                        <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <input type="text" name="place"
+                            class="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:bg-white/10 focus:border-blue-500/50 transition text-lg"
+                            placeholder="City, country, or 'Remote'">
+                    </div>
+
+                    <!-- Search Button -->
+                    <button type="submit"
+                        class="px-10 py-5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg rounded-2xl hover:shadow-lg hover:shadow-blue-500/30 transform hover:scale-105 transition-all duration-300">
+                        Search Jobs
+                    </button>
+                </div>
+            </form>
+
+            <!-- Quick Stats / Trust -->
+            <div class="mt-12 flex items-center justify-center gap-8 text-sm text-gray-500 font-medium">
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span>No registration required</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                    <span>Free CV Analysis</span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</div>
+
+<script>
+    function openBot() {
+        alert("AI Bot is coming soon!");
+    }
+</script>
+{% endblock %}

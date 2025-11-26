@@ -1,0 +1,13 @@
+Flask==3.1.0
+flask-session==0.8.0
+python-docx==1.1.2
+PyPDF2==3.0.1
+beautifulsoup4==4.12.3
+requests==2.32.3
+aiohttp==3.11.11
+selenium==4.27.1
+webdriver-manager==4.0.2
+langchain==0.3.17
+langchain-ollama==0.2.0
+langchain-community==0.3.15
+faiss-cpu

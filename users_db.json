@@ -1,0 +1,39 @@
+{
+  "e9896b63-d958-44ca-8170-e2c0cc8e4f02": {
+    "id": "e9896b63-d958-44ca-8170-e2c0cc8e4f02",
+    "username": "test",
+    "email": "test@test.com",
+    "password_hash": "scrypt:32768:8:1$7Dl0Xo2pN3z9TqXM$4135e99a2ae16af395045b62add9282d0083a5f2a2135fbeaf92f5263e9b760e613b6cdcbd99b9da18030450c1555715c7979cc0d6b124e4ae167da800e04e00",
+    "cv_data": null,
+    "cv_filename": null
+  },
+  "143eb235-eb66-4a2d-9977-16c3b96602a1": {
+    "id": "143eb235-eb66-4a2d-9977-16c3b96602a1",
+    "username": "Amr",
+    "email": "amrkhalafalla607@gmail.com",
+    "password_hash": "scrypt:32768:8:1$jsdD2wCllp9mSrzw$8a47d6abf4d3fa2637e9b4ea514524a29df2cf5bb3dee0ca393a8400dee38c79ab5ceb50321bb04034f0d117caffbefb02faa7e857eeeb5b6d151f5c74098ac9",
+    "cv_data": {
+      "raw_text": "Amr Mohamed Ahmed\nMobile: (+2) 01026036443\nLinkedIn: https://www.linkedin.com/in/amr-mohamed-9ab096232/\nEmail: Amrkhalafalla607@gmail.com\nGitHub: https://github.com/amr-ai\nProfile Summary\nAI student with hands-on experience in building smart systems. Interested in machine learning,\ncomputer vision, and real-world applications. Focused, fast learner, and ready to contribute to\nimpactful projects.\nEducation\nBachelor of Artificial Intelligence, Menoufia University (Expected July 2025):\n-Department: Machine Intelligence\n-Overall Grade: Good (GPA 2.73/4.0)\nGraduation Project\nARGUS AI - Smart Exam Monitoring System (Spring 2025)\n\u2022 Developed an AI-powered real-time exam monitoring system to detect cheating behaviors and\nunauthorized tools in physical exam halls\n\u2022 Integrated YOLOv8 for object detection, FaceNet for identity verification, and phone detection\nalgorithms\n\u2022 Built Django web interface for live visualization and reporting with RAG-based natural language\nquery system\n\u2022 Technologies: Python, OpenCV, TensorFlow, YOLOv8, SQLite, LangChain, Django\nTrainings & Courses\nAspire Leadership program from Harvard University (Summer 2024):\n\u2022 Completed 30 hours from a Harvard Business School-founded online leadership development\nprogram, connecting with peers and educators from over 150 countries.\n\u2022 Strengthened core leadership, networking, and communication skills by participating in live\nseminars with Harvard faculty and engaging in idea exchange within a global virtual classroom.\nArtificial Intelligence (Summer 2022):\n\u2022 National Telecommunication Institute (NTI), Online Course\n\u2022 90 hrs of technical training, 30 hrs of Soft Skills training\nOdoo (Summer 2024):\n\u2022 Completed an Odoo training program focused on financial transactions and AI integration.\n\u2022 Gained hands-on experience with Odoo's functionalities, including Sales, Inventory, and Studio.\nActivities\nAI Entrepreneurship Club (Feb 2022)\n\u2022 Coordinated events and programs, providing valuable resources and facilitating connections for\nlocal entrepreneurs, fostering a flourishing startup ecosystem.\nPartnership & Sponsorship, GDSC Menoufia University (Nov 2023)\n\u2022 Developed and managed sponsorship strategies, securing funding and resources to support\nuniversity events, demonstrating a strong understanding of building and nurturing partnerships.\nProjects\nTherapist Chatbot (NLP, Python, LSTM)\n\u2022 Developed an LSTM-based therapist chatbot using NLP and Python, resulting in a 30% increase in\nuser engagement and a 4-second reduction in average response time.\nClassification of Egyptian Currencies (PyTorch, ResNet50)\n\u2022 Developed a currency classification system using the ResNet50 model in PyTorch to classify\nEgyptian currencies into 9 distinct categories.\nCharacter Simulator RAG System (Python, LangChain, FAISS)\n\u2022 Developed an AI-based character simulation system using RAG, LangChain, and FAISS for\nsemantic search to create realistic digital personas with dialogue history maintenance and\nextensible architecture supporting multiple characters with unique personalities\nSkills:\nLeadership, Teamwork, Torch, TensorFlow, LLM, Data Analysis, NLP, RAG\nLanguages:\n-English: Advanced (reading and writing)\n-German: Intermediate (reading), Basic (speaking)\n",
+      "sections": {
+        "experience": "",
+        "education": "bachelor of artificial intelligence, menoufia university (expected july 2025):\n-department: machine intelligence\n-overall grade: good (gpa 2.73/4.0)\ngraduation project\nargus ai - smart exam monitoring system (spring 2025)\n\u2022 developed an ai-powered real-time exam monitoring system to detect cheating behaviors and\nunauthorized tools in physical exam halls\n\u2022 integrated yolov8 for object detection, facenet for identity verification, and phone detection\nalgorithms\n\u2022 built django web interface for live visualization and reporting with rag-based natural language\nquery system\n\u2022 technologies: python, opencv, tensorflow, yolov8, sqlite, langchain, django\ntrainings & courses\naspire leadership program from harvard university (summer 2024):\n\u2022 completed 30 hours from a harvard business school-founded online leadership development\nprogram, connecting with peers and educators from over 150 countries.\n\u2022 strengthened core leadership, networking, and communication skills by participating in live\nseminars with harvard faculty and engaging in idea exchange within a global virtual classroom.\nartificial intelligence (summer 2022):\n\u2022 national telecommunication institute (nti), online course\n\u2022 90 hrs of technical training, 30 hrs of soft skills training\nodoo (summer 2024):\n\u2022 completed an odoo training program focused on financial transactions and ai integration.\n\u2022 gained hands-on experience with odoo's functionalities, including sales, inventory, and studio.\nactivities\nai entrepreneurship club (feb 2022)\n\u2022 coordinated events and programs, providing valuable resources and facilitating connections for\nlocal entrepreneurs, fostering a flourishing startup ecosystem.\npartnership & sponsorship, gdsc menoufia university (nov 2023)\n\u2022 developed and managed sponsorship strategies, securing funding and resources to support\nuniversity events, demonstrating a strong understanding of building and nurturing partnerships.\n",
+        "skills": "leadership, teamwork, torch, tensorflow, llm, data analysis, nlp, rag\nlanguages:\n-english: advanced (reading and writing)\n-german: intermediate (reading), basic (speaking)\n\n",
+        "projects": "therapist chatbot (nlp, python, lstm)\n\u2022 developed an lstm-based therapist chatbot using nlp and python, resulting in a 30% increase in\nuser engagement and a 4-second reduction in average response time.\nclassification of egyptian currencies (pytorch, resnet50)\n\u2022 developed a currency classification system using the resnet50 model in pytorch to classify\negyptian currencies into 9 distinct categories.\ncharacter simulator rag system (python, langchain, faiss)\n\u2022 developed an ai-based character simulation system using rag, langchain, and faiss for\nsemantic search to create realistic digital personas with dialogue history maintenance and\nextensible architecture supporting multiple characters with unique personalities\n"
+      },
+      "skills": [
+        "Computer Vision",
+        "Django",
+        "Git",
+        "Machine Learning",
+        "NLP",
+        "PyTorch",
+        "Python",
+        "SQL",
+        "TensorFlow"
+      ],
+      "experience_years": 0,
+      "parsed": true
+    },
+    "cv_filename": "Amr_MohamedV3.pdf"
+  }
+}

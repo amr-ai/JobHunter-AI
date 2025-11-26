@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}Career Chat • JobFinder AI{% endblock %}
+
+{% block content %}
+<div class="flex-1 min-h-screen" x-data="chatHandler()">
+
+    <!-- Chat Container -->
+    <div class="h-screen flex flex-col">
+
+        <!-- Header -->
+        <div class="glass border-b border-white/10 px-6 py-4">
+            <div class="max-w-4xl mx-auto flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <a href="/profile" class="text-gray-300 hover:text-white transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                    </a>
+                    <div>
+                        <h1 class="text-xl font-bold text-white">Career Chat Assistant</h1>
+                        <p class="text-sm text-gray-400">Powered by RAG + Your CV</p>
+                    </div>
+                </div>
+                <span
+                    class="px-3 py-1 bg-green-500/20 text-green-300 text-xs font-bold rounded-full border border-green-500/30 flex items-center gap-2">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    ONLINE
+                </span>
+            </div>
+        </div>
+
+        <!-- Messages Area -->
+        <div class="flex-1 overflow-y-auto px-6 py-6" id="chat-messages">
+            <div class="max-w-4xl mx-auto space-y-4">
+
+                <!-- Welcome Message -->
+                <div class="flex gap-3">
+                    <div
+                        class="w-10 h-10 shrink-0 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm">
+                        AI
+                    </div>
+                    <div class="flex-1 bg-white/5 rounded-2xl rounded-tl-none p-4 border border-white/10">
+                        <p class="text-gray-200">
+                            👋 Hello <strong>{{ user.username }}</strong>! I'm your AI Career Assistant.
+                            {% if user.cv_data %}
+                            I've analyzed your CV and I'm ready to help you with career advice, job search strategies,
+                            interview prep, and more!
+                            {% else %}
+                            Upload your CV to get personalized career advice tailored to your skills and experience.
+                            {% endif %}
+                        </p>
+                        <p class="text-gray-400 text-sm mt-2">What would you like to know?</p>
+                    </div>
+                </div>
+
+                <!-- Messages will be added here dynamically -->
+                <template x-for="msg in messages" :key="msg.id">
+                    <div class="flex gap-3" :class="msg.isUser ? 'flex-row-reverse' : ''">
+                        <div class="w-10 h-10 shrink-0 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                            :class="msg.isUser ? 'bg-gray-600' : 'bg-gradient-to-br from-purple-500 to-blue-500'">
+                            <span x-text="msg.isUser ? '{{ user.username[0].upper() }}' : 'AI'"></span>
+                        </div>
+                        <div class="flex-1 rounded-2xl p-4 max-w-[80%]"
+                            :class="msg.isUser ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-white/5 border border-white/10 text-gray-200 rounded-tl-none'">
+                            <p x-html="msg.text.replace(/\n/g, '<br>')"></p>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Loading indicator -->
+                <div x-show="isLoading" class="flex gap-3">
+                    <div
+                        class="w-10 h-10 shrink-0 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm">
+                        AI
+                    </div>
+                    <div class="bg-white/5 rounded-2xl rounded-tl-none p-4 border border-white/10 flex gap-1">
+                        <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
+                        <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                            style="animation-delay: 0.1s"></span>
+                        <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                            style="animation-delay: 0.2s"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="glass border-t border-white/10 px-6 py-4">
+            <div class="max-w-4xl mx-auto">
+                <form @submit.prevent="sendMessage()" class="flex gap-3">
+                    <input type="text" x-model="input" placeholder="Ask me anything about your career..."
+                        class="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:bg-white/10 focus:border-purple-500/50 transition"
+                        :disabled="isLoading">
+                    <button type="submit"
+                        class="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-purple-500/30 transition disabled:opacity-50"
+                        :disabled="isLoading || !input.trim()">
+                        Send
+                    </button>
+                </form>
+
+                <!-- Quick Suggestions -->
+                <div class="flex flex-wrap gap-2 mt-3">
+                    <button @click="input = 'Give me career advice'"
+                        class="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs text-gray-300 transition">
+                        💼 Career Advice
+                    </button>
+                    <button @click="input = 'What skills should I learn?'"
+                        class="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs text-gray-300 transition">
+                        🎯 Skills to Learn
+                    </button>
+                    <button @click="input = 'How to prepare for interviews?'"
+                        class="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs text-gray-300 transition">
+                        🎤 Interview Prep
+                    </button>
+                    <button @click="input = 'Help me improve my CV'"
+                        class="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs text-gray-300 transition">
+                        📝 CV Tips
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('chatHandler', () => ({
+            messages: [],
+            input: '',
+            isLoading: false,
+            messageId: 0,
+
+            sendMessage() {
+                if (!this.input.trim() || this.isLoading) return;
+
+                const userMessage = this.input.trim();
+                this.messages.push({
+                    id: this.messageId++,
+                    text: userMessage,
+                    isUser: true
+                });
+
+                this.input = '';
+                this.scrollToBottom();
+                this.isLoading = true;
+
+                // Send to backend
+                fetch('/chat/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: userMessage
+                    })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        this.messages.push({
+                            id: this.messageId++,
+                            text: data.response,
+                            isUser: false
+                        });
+                        this.scrollToBottom();
+                    })
+                    .catch(error => {
+                        this.messages.push({
+                            id: this.messageId++,
+                            text: 'Sorry, I encountered an error. Please try again.',
+                            isUser: false
+                        });
+                    })
+                    .finally(() => {
+                        this.isLoading = false;
+                    });
+            },
+
+            scrollToBottom() {
+                this.$nextTick(() => {
+                    const container = document.getElementById('chat-messages');
+                    container.scrollTop = container.scrollHeight;
+                });
+            }
+        }));
+    });
+</script>
+{% endblock %}
