@@ -114,7 +114,7 @@ jobhunter/
 
 1. **Clone & Navigate**
    ```bash
-   git clone https://github.com/yourusername/jobhunter.git
+   git clone https://github.com/amr-ai/JobHunter-AI.git
    cd jobhunter
    ```
 
@@ -189,43 +189,13 @@ jobhunter/
 
 ---
 
-## 🤝 Contributing
+📷Screanshots
+<img width="1920" height="887" alt="home" src="https://github.com/user-attachments/assets/d71a5cfa-c2a8-40f7-badd-0be34c027195" />
+<img width="1917" height="888" alt="profile" src="https://github.com/user-attachments/assets/141ddf18-1860-447a-a725-555bb35d06db" />
+<img width="1913" height="887" alt="chat" src="https://github.com/user-attachments/assets/a214b9b4-70c4-4881-8b4c-56b31a12903c" />
+<img width="1920" height="890" alt="search" src="https://github.com/user-attachments/assets/543163eb-377d-422b-9bfd-539b3e95533c" />
+<img width="1721" height="817" alt="cv_builder" src="https://github.com/user-attachments/assets/37084397-93b5-41ab-b1e4-cd61be545d8d" />
 
-Contributions welcome! Please:
-1. Fork the repo
-2. Create a feature branch
-3. Commit your changes
-4. Open a Pull Request
-
----
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) for details.
-
----
-
-## 👨‍💻 Author
-
-**Your Name**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- Email: your.email@example.com
-
----
-
-## 🙏 Credits
-
-- [Flask](https://flask.palletsprojects.com/)
-- [LangChain](https://www.langchain.com/)
-- [Ollama](https://ollama.ai/)
-- [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/)
-- [Selenium](https://www.selenium.dev/)
-
----
-
-<div align="center">
-
-**Built with ❤️ to help job seekers find their dream career**
 
 ⭐ **Star this repo if you find it helpful!**
 
